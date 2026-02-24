@@ -74,15 +74,13 @@ function redo() {
 function isMod(e) { return (e.metaKey || e.ctrlKey) && !e.altKey; }
 
 function isUndoHotkey(e) {
-  if (window.hotkeys?.get && isHotkey(e, "undo")) return true;
-  return isMod(e) && !e.shiftKey && 
-         (e.code === "KeyZ" || String(e.key).toLowerCase() === "z");
+  if (!window.hotkeys?.get) return false;
+  return isHotkey(e, "undo");
 }
 
 function isRedoHotkey(e) {
-  if (window.hotkeys?.get && isHotkey(e, "redo")) return true;
-  return isMod(e) && e.shiftKey && 
-         (e.code === "KeyZ" || String(e.key).toLowerCase() === "z");
+  if (!window.hotkeys?.get) return false;
+  return isHotkey(e, "redo");
 }
 
 
