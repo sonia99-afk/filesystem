@@ -22,19 +22,25 @@
     return tree ? asciiFromTree(tree) : '```\n(дерево не найдено)\n```';
   }
 
-  function installCopyHandler() {
+ function installCopyHandler() {
     const copyBtn = getCopyBtn();
     if (!copyBtn || copyBtn.__tgCopyInstalled) return;
     copyBtn.__tgCopyInstalled = true;
-
+  
+    let revertTimer = null;
+    const baseText = copyBtn.textContent; // запомним один раз
+  
     copyBtn.onclick = async () => {
       try {
         const text = getCurrentCopyText();
         await navigator.clipboard.writeText(text);
-        const originalText = copyBtn.textContent;
+  
         copyBtn.textContent = 'Скопировано ✓';
-        setTimeout(() => {
-          copyBtn.textContent = originalText;
+  
+        if (revertTimer) clearTimeout(revertTimer);
+        revertTimer = setTimeout(() => {
+          copyBtn.textContent = baseText;
+          revertTimer = null;
         }, 900);
       } catch (e) {
         alert('Не получилось скопировать.');
